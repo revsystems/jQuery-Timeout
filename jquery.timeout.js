@@ -73,6 +73,8 @@ THE SOFTWARE.
         return $(this).each(doTimeout);
     };
     
+    // cancel and force are basically the same, except they execute different functions
+    // this does the dirty work for both
     function endTimeout( ids, calls ) {
         // ids can be an array or a string of ids delimited by spaces
         ids = $.isArray(ids) ? ids : ids.split(/\s+/);
@@ -104,7 +106,7 @@ THE SOFTWARE.
         return endTimeout.call(this, ids, ["onTimeout", "onComplete"] );
     };
 
-    // global scope -- wrap the above using the window scope
+    // sugar up some syntax for global (window scoped) timeouts
     $.each(["timeout", "cancelTimeout", "forceTimeout"], function(i, funcName) {
       $[funcName] = function() {
         return $.fn[funcName].apply(window, arguments);

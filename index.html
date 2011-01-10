@@ -4,7 +4,6 @@
 <head>
   <meta http-equiv="content-type"  content="text/html;charset=UTF-8" />
   <title>jQuery Timeout</title>
-  <link rel="stylesheet" href="style.css" type="text/css" media="all" />
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
   <script type="text/javascript" src="jquery.timeout.js"></script>
   <script type="text/javascript">
@@ -73,6 +72,10 @@
   });
   </script>
   <style type="text/css">
+  html,body{margin:0;padding:0;}
+  .outer_container{text-align:center;}
+  .inner_container{margin:0 auto;text-align:left;width:960px;}
+  
   #debounce_example a{color:black;}
   #tabs{height:1em;padding:10px;position:relative;}
   #tabs div{color:white;left:0;padding:10px;position:absolute;top:0;}
@@ -90,10 +93,11 @@
     </p>
     <p>
       Many of the ideas for this were taken from <a href="http://benalman.com/projects/jquery-dotimeout-plugin/">Ben Alman's doTimeout plugin</a>. 
-      In fact, I'd be using that plugin, but for two reasons:
+      In fact, I'd be using that plugin, but for a few reasons:
       <ol>
         <li>I think onTimeout/onCancel/onComplete functions (basically a try/catch/finally pattern) are very useful in a timeout/animation environment, and I wanted to implement that.</li>
         <li>The naming and syntax was a little unclear to me, and I like my code to be extremely legible.</li>
+        <li>I want to encourage the use of closures and discourage the use of eval styles.</li>
       </ol>
     </p>
     
