@@ -54,12 +54,14 @@ THE SOFTWARE.
                 // call the finally function if the timeout/interval is terminating
                 else if(onComplete) {
                     onComplete.call($e[0]);
+                    $e.removeData(uniq(id));
                 }
                 
-                // cleanup
-                if(!isInterval) { 
-                  $e.removeData(uniq(id));
+                // just cleanup if there's nothing to execute
+                else {
+                    $e.removeData(uniq(id));
                 }
+                
             }, delay);
             
             // store the data for this timeout
