@@ -40,11 +40,9 @@ Requires [jQuery](http://jquery.com) and this plugin.
     
 ### Function Definitions
 
-    timeout( id, delay, onTimeout[, onCancel[, onComplete]] )
-    
-    cancelTimeout( id )
-    
-    forceTimeout( id )
+  * timeout( id, delay, onTimeout[, onCancel[, onComplete]] )
+  * cancelTimeout( id )
+  * forceTimeout( id )
 
 ### Local Timeouts
 
@@ -54,10 +52,13 @@ will be set for each element with a "my_div" class. These timeouts can be indivi
     $(".my_div").timeout("my_timeout_id1", 1000, function() {
       // etc...
     });
+    
     $(".my_div").timeout("my_timeout_id2", 1000, function() {
       // etc...
     });
+    
     $(".my_div:first").cancelTimeout("my_timeout_id1");
+    
     $(".my_div:last").forceTimeout("my_timeout_id2");
     
 ### Optional onCancel and onComplete Functions
@@ -111,10 +112,13 @@ The unscoped version below is just syntactic sugar for the local syntax $(window
     $.timeout("timeout_id1", 1000, function() {
       // etc...
     });
+    
     $.timeout("timeout_id2", 1000, function() {
       // etc...
     });
+    
     $.cancelTimeout("timeout_id1");
+    
     $.forceTimeout("timeout_id2");
     
 ### Polling Timeouts
