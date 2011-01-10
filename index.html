@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="content-type"  content="text/html;charset=UTF-8" />
+  <title>jQuery Timeout</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.timeout.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    // interval example
+    var blinkCount = 0;
+    $.timeout("blinky", 2000, function() {
+      if(blinkCount % 2 == 0) {
+        $("#interval_example").css("color", "red");
+      }
+      else {
+        $("#interval_example").css("color", "black");
+      }
+      blinkCount++;
+      return true;
+    }, function() {
+      // if the interval is cancelled, make sure it immediately turns black
+      $("#interval_example").css("color", "black").text("Cancelled");
+    });
+    
+    // debounce example
+    $("#debounce_example a").hover(function() {
+      $(this).timeout("hover", 400, function() {
+        $(this).css("color", "red");
+      });
+    }, function() {
+      $(this).timeout("hover", 500, function() {
+        $(this).css("color", "black");
+      });
+    });
+    
+    // onCancel/onComplete example
+    var $tabs = $("#tabs").children();
+    var $pagination = $("#pagination").children("a");
+    $tabs.not(".active").fadeTo(0, 0.0);
+    $pagination.each(function(i) {
+      var $a = $(this);
+      var $tab = $tabs.eq(i);
+      $a.click(function( event ) {
+        event.preventDefault();
+        
+        // if you've clicked and there's still a transition going on, cancel it
+        $tabs.cancelTimeout('transition');
+        
+        // unset/set appropriate active tabs and pagination
+        var $active = $tabs.filter(".active").removeClass("active");
+        var $activeA = $pagination.filter(".active").removeClass("active");
+        $tab.addClass("active");
+        $a.addClass("pending");
+        
+        // fade out active, delay 1000, fade in this tab
+        $active.fadeTo(500, 0.0);
+        $tabs.timeout('transition', 1500, function() {
+          $tab.stop().fadeTo(500, 1.0);
+          $a.addClass("active");
+        }, function() {
+          // if cancelled, stop the animation effects and clean up opacity
+          $active.stop();
+          $tab.stop();
+          $tabs.not($tab[0]).css("opacity", 0);
+        }, function() {
+          $a.removeClass("pending");
+        });
+      });
+    });
+  });
+  </script>
+  <style type="text/css">
+  #debounce_example a{color:black;}
+  #tabs{height:1em;padding:10px;position:relative;}
+  #tabs div{color:white;left:0;padding:10px;position:absolute;top:0;}
+  #pagination .pending{color:lightgreen;}
+  #pagination .active{color:green;}
+  </style>
+</head>
+<body>
+<div class="outer_container">
+  <div class="inner_container">
+    <h1>jQuery Timeout</h1>
+    <p>
+      Developer-friendly timeouts with jquery chaining, debouncing, element context, and the 
+      ability to gracefully handle timeout cancelling.
+    </p>
+    <p>
+      Many of the ideas for this were taken from <a href="http://benalman.com/projects/jquery-dotimeout-plugin/">Ben Alman's doTimeout plugin</a>. 
+      In fact, I'd be using that plugin, but for two reasons:
+      <ol>
+        <li>I think onTimeout/onCancel/onComplete functions (basically a try/catch/finally pattern) are very useful in a timeout/animation environment, and I wanted to implement that.</li>
+        <li>The naming and syntax was a little unclear to me, and I like my code to be extremely legible.</li>
+      </ol>
+    </p>
+    
+    <h2>Interval Example</h2>
+    <p>
+      A global timeout is used here to flip between red/black text every second.
+      This is annoying, so you might want to <a href="#" onClick="$.cancelTimeout('blinky'); return false;">cancel it</a>.
+    </p>
+    <div id="interval_example">
+      Blinking Text
+    </div>
+    
+    <h2>Debouncing Example</h2>
+    <p>This uses a hover intent example to show how two timeouts with the same ID can debounce.</p>
+    <p>
+      Note that we accomplish debouncing here by calling timeout on the same ID before it has finished timing out.
+      The existing timeout is cancelled and the new one is started immediately.
+    </p>
+    <div id="debounce_example">
+      <a href="#">abc</a>
+      <a href="#">def</a>
+      <a href="#">ghi</a>
+      <a href="#">jkl</a>
+    </div>
+    
+    <h2>onCancel/onComplete Example (Animated, Delayed Transition)</h2>
+    <p>
+      In this example, clicking a number will fade out the active tab, wait 1 second, and fade in a new tab. During the transition, 
+      you can still interact with the pagination without errors because of the onCancel/onComplete functions we apply.
+    </p>
+    <div id="tabs">
+      <div class="active" style="background:red;">abc</div>
+      <div style="background:green;">def</div>
+      <div style="background:blue;">ghi</div>
+      <div style="background:black;">jkl</div>
+    </div>
+    <div id="pagination">
+      <a href="#" class="active">1</a>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">4</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
