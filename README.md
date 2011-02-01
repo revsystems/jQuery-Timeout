@@ -12,6 +12,10 @@ function definition preferences and I wanted onCancel/onComplete functionality b
 
 You can see some examples [here](http://dl.dropbox.com/u/124192/websites/jquerytimeout/index.html).
 
+## TODO
+
+  * Make new version of jQuery-Timeout for jQuery 1.5 that extends the Deferred object. It can do all the work for us.
+
 ## Features
 
   * Simplify your complicated timeouts and intervals
